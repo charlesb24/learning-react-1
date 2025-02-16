@@ -1,8 +1,8 @@
 import {useCallback, useState} from "react";
 
 import QUESTIONS from "../questions.js";
-import completionImg from "../assets/quiz-complete.png";
 import Question from "./Question.jsx";
+import Summary from "./Summary.jsx";
 
 export default function Quiz() {
   const [answers, setAnswers] = useState([]);
@@ -21,17 +21,7 @@ export default function Quiz() {
   );
 
   if (quizFinished) {
-    const correctAnswers = answers.map(
-      (answer, i) => QUESTIONS[i].answers[0] === answer
-    ).filter(answer => answer === true).length;
-
-    return (
-      <div id="summary">
-        <img src={completionImg} alt="Trophy icon" />
-        <h2>Quiz Completed!</h2>
-        <p>Correct Answers: { correctAnswers }</p>
-      </div>
-    );
+    return <Summary answerData={answers} />
   }
 
   return (
