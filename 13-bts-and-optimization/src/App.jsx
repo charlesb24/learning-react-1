@@ -19,7 +19,7 @@ function App() {
       <Header />
       <main>
         <CounterInitializer onChangeCount={handleSetCount} />
-        <Counter initialCount={chosenCount} />
+        <Counter key={chosenCount} initialCount={chosenCount} />
       </main>
     </>
   );
