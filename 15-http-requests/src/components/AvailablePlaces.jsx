@@ -3,6 +3,8 @@ import {useEffect, useState} from "react";
 import Places from './Places.jsx';
 import ErrorInfo from "./ErrorInfo.jsx";
 
+import { sortPlacesByDistance } from '../loc.js';
+
 export default function AvailablePlaces({ onSelectPlace }) {
   const [isLoading, setIsLoading] = useState(false);
   const [availablePlaces, setAvailablePlaces] = useState([]);
@@ -20,12 +22,21 @@ export default function AvailablePlaces({ onSelectPlace }) {
           throw new Error('Failed to load places.');
         }
 
-        setAvailablePlaces(data);
+        navigator.geolocation.getCurrentPosition((pos) => {
+          const sortedPlaces = sortPlacesByDistance(
+            data.places,
+            pos.coords.latitude,
+            pos.coords.longitude
+          );
+
+          setAvailablePlaces(sortedPlaces);
+          setIsLoading(false);
+        });
+
       } catch (e) {
         setErrorInfo({ message: e.message || 'Could not load places, please try again later.' });
+        setIsLoading(false);
       }
-
-      setIsLoading(false);
     }
 
     loadPlaces();
