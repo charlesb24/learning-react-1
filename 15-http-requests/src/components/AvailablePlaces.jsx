@@ -1,24 +1,44 @@
 import {useEffect, useState} from "react";
 
 import Places from './Places.jsx';
+import ErrorInfo from "./ErrorInfo.jsx";
 
 export default function AvailablePlaces({ onSelectPlace }) {
   const [isLoading, setIsLoading] = useState(false);
   const [availablePlaces, setAvailablePlaces] = useState([]);
+  const [errorInfo, setErrorInfo] = useState();
 
   useEffect(() => {
     async function loadPlaces() {
       setIsLoading(true);
 
-      const res = await fetch('http://localhost:3000/places');
-      const data = await res.json();
+      try {
+        const res = await fetch('http://localhost:3000/places');
+        const data = await res.json();
 
-      setAvailablePlaces(data);
+        if (!res.ok) {
+          throw new Error('Failed to load places.');
+        }
+
+        setAvailablePlaces(data);
+      } catch (e) {
+        setErrorInfo({ message: e.message || 'Could not load places, please try again later.' });
+      }
+
       setIsLoading(false);
     }
 
     loadPlaces();
   }, []);
+
+  if (errorInfo) {
+    return (
+      <ErrorInfo
+        title="An error occurred"
+        message={errorInfo.message}
+      />
+    );
+  }
 
   return (
     <Places
