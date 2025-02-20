@@ -2,8 +2,8 @@ import {useEffect, useState} from "react";
 
 export default function useFetch(fetchFn, initialValue) {
   const [isLoading, setIsLoading] = useState();
-  const [fetchedData, setFetchedData] = useState();
-  const [errorInfo, setErrorInfo] = useState(initialValue);
+  const [fetchedData, setFetchedData] = useState(initialValue);
+  const [errorInfo, setErrorInfo] = useState();
 
   useEffect(() => {
     async function fetchData() {
@@ -24,6 +24,7 @@ export default function useFetch(fetchFn, initialValue) {
   return {
     isLoading,
     fetchedData,
+    setFetchedData,
     errorInfo,
   };
 }
