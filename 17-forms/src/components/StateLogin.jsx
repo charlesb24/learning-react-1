@@ -1,13 +1,22 @@
-import {useRef} from "react";
+import {useState} from "react";
 
-export default function Login() {
-  const emailInput = useRef();
-  const passwordInput = useRef();
+export default function StateLogin() {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  })
 
   function handleSubmit(event) {
     event.preventDefault();
 
-    console.log(`email: ${emailInput.current.value}\npassword: ${passwordInput.current.value}`);
+    console.log(`User info - Email: ${formData.email} Password: ${formData.password}`);
+  }
+
+  function handleInputChange(key, value) {
+    setFormData(prevData => ({
+      ...prevData,
+      [key]: value,
+    }));
   }
 
   return (
@@ -21,7 +30,8 @@ export default function Login() {
             id="email"
             type="email"
             name="email"
-            ref={emailInput}
+            value={formData.email}
+            onChange={(e) => handleInputChange('email', e.target.value)}
           />
         </div>
 
@@ -31,7 +41,8 @@ export default function Login() {
             id="password"
             type="password"
             name="password"
-            ref={passwordInput}
+            value={formData.password}
+            onChange={(e) => handleInputChange('password', e.target.value)}
           />
         </div>
       </div>
