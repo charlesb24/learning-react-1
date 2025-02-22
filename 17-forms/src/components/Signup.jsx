@@ -10,6 +10,8 @@ export default function Signup() {
     entries.acquisition = acquisitionChannel;
 
     console.log(entries);
+
+    event.target.reset();
   }
 
   return (
