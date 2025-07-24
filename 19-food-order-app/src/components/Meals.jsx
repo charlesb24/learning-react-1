@@ -25,6 +25,7 @@ export default function Meals() {
       {meals.map(meal => (
         <MealInfo
           key={meal.id}
+          id={meal.id}
           name = {meal.name}
           description = {meal.description}
           price = {meal.price}
