@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import MealInfo from "./MealInfo.jsx";
+import MealInfo from './MealInfo.jsx';
 
 export default function Meals() {
   const [ meals, setMeals ] = useState([]);
