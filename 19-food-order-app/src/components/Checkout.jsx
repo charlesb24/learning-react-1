@@ -17,13 +17,33 @@ export default function Checkout() {
     progressContext.hideCheckout();
   }
 
+  function handleCheckout(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const customerData = Object.fromEntries(formData.entries());
+
+    fetch('http://localhost:3000/orders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        order: {
+          items: cartContext.items,
+          customer: customerData,
+        },
+      }),
+    });
+  }
+
   return (
     <Modal open={progressContext.progress === 'checkout'} onClose={handleCloseCheckout}>
-      <form>
+      <form onSubmit={handleCheckout}>
         <h2>Checkout</h2>
         <p>Total: {currencyFormatter.format(totalPrice)}</p>
 
-        <Input label="Full Name" type="text" id="full-name" />
+        <Input label="Full Name" type="text" id="name" />
         <Input label="Email Address" type="email" id="email" />
         <Input label="Street" type="text" id="street" />
 
@@ -34,7 +54,7 @@ export default function Checkout() {
 
         <p className="modal-actions">
           <Button type="button" textOnly onClick={handleCloseCheckout}>Close</Button>
-          <Button type="button" onClick={() => null}>Submit Order</Button>
+          <Button type="submit">Submit Order</Button>
         </p>
       </form>
     </Modal>
