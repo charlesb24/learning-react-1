@@ -8,7 +8,7 @@ export const CORE_CONCEPTS = [
     image: componentsImg,
     title: 'Components',
     description:
-      'The core UI building block - compose the user interface by combining multiple components.',
+      'The core ui building block - compose the user interface by combining multiple components.',
   },
   {
     image: jsxImg,
@@ -26,7 +26,7 @@ export const CORE_CONCEPTS = [
     image: stateImg,
     title: 'State',
     description:
-      'React-managed data which, when changed, causes the component to re-render & the UI to update.',
+      'React-managed data which, when changed, causes the component to re-render & the ui to update.',
   },
 ];
 
