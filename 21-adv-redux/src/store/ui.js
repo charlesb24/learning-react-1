@@ -4,10 +4,18 @@ const uiSlice = createSlice({
   name: 'ui',
   initialState: {
     showCart: false,
+    notification: false,
   },
   reducers: {
     toggleCartVisibility(state) {
       state.showCart = !state.showCart;
+    },
+    showNotification(state, action) {
+      state.notification = {
+        status: action.payload.status,
+        title: action.payload.title,
+        message: action.payload.message,
+      };
     },
   },
 });
