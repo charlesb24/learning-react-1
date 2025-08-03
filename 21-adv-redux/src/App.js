@@ -5,57 +5,31 @@ import Cart from './components/cart/Cart';
 import Notification from './components/ui/Notification';
 import Layout from './components/layout/Layout';
 import Products from './components/shop/Products';
-import { uiActions } from './store/ui';
+import { fetchCartData, sendCartData } from './store/cart-actions';
 
 let isInitialLoad = true;
-const FIREBASE_URL = '';
 
 function App() {
   const dispatch = useDispatch();
   const showCart = useSelector(state => state.ui.showCart);
   const notification = useSelector(state => state.ui.notification);
-  const cartItems = useSelector(state => state.cart.items);
+  const cart = useSelector(state => state.cart);
 
   useEffect(() => {
-    const sendCartData = async () => {
-      dispatch(uiActions.showNotification({
-        status: 'pending',
-        title: 'Sending...',
-        message: 'Sending cart data!',
-      }));
+    dispatch(fetchCartData());
+  }, [dispatch]);
 
-      const res = await fetch(FIREBASE_URL, {
-        method: 'PUT',
-        body: JSON.stringify(cartItems),
-      });
-
-      if (!res.ok) {
-        throw new Error('Failed to send cart data.');
-      }
-
-      dispatch(uiActions.showNotification({
-        status: 'success',
-        title: 'Success!',
-        message: 'Sent cart data successfully!',
-      }));
-
-      const resData = await res.json();
-    }
-
+  useEffect(() => {
     if (isInitialLoad) {
       isInitialLoad = false;
       return;
     }
 
-    sendCartData().catch(err => {
-      dispatch(uiActions.showNotification({
-        status: 'error',
-        title: 'Error',
-        message: 'Sending cart data failed!',
-      }));
-    });
+    if (cart.changed) {
+      dispatch(sendCartData(cart));
+    }
 
-  }, [cartItems, dispatch]);
+  }, [cart, dispatch]);
 
   return (
     <>
