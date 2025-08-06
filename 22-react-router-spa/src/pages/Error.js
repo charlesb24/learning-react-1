@@ -1,16 +1,15 @@
-import { Outlet } from 'react-router-dom';
-
 import Navigation from '../components/Navigation';
 
-function Root() {
+function Error() {
   return (
     <>
       <Navigation />
       <main>
-        <Outlet />
+        <h1>An error occurred!</h1>
+        <p>This page doesn't exist.</p>
       </main>
     </>
-  );
+  )
 }
 
-export default Root;
+export default Error;
