@@ -1,16 +1,27 @@
-import { useNavigate, Form } from 'react-router-dom';
+import { useActionData, useNavigate, useNavigation, Form, redirect } from 'react-router-dom';
 
 import classes from './EventForm.module.css';
 
 function EventForm({ method, event }) {
+  const data = useActionData();
   const navigate = useNavigate();
+  const navigation = useNavigation();
+
+  const isSubmitting = navigation.state === 'submitting';
 
   function cancelHandler() {
     navigate('..');
   }
 
   return (
-    <Form method="post" className={classes.form}>
+    <Form method={method} className={classes.form}>
+      {data && data.errors && (
+        <ul>
+          {Object.values(data.errors).map(error => (
+            <li key={error}>{error}</li>
+          ))}
+        </ul>
+      )}
       <p>
         <label htmlFor="title">Title</label>
         <input
@@ -52,13 +63,48 @@ function EventForm({ method, event }) {
         />
       </p>
       <div className={classes.actions}>
-        <button type="button" onClick={cancelHandler}>
+        <button type="button" onClick={cancelHandler} disabled={isSubmitting}>
           Cancel
         </button>
-        <button>Save</button>
+        <button disabled={isSubmitting}>{ isSubmitting ? 'Submitting...' : 'Save' }</button>
       </div>
     </Form>
   );
 }
 
 export default EventForm;
+
+export async function action({ request, params }) {
+  const formData = await request.formData();
+
+  const eventData = {
+    title: formData.get('title'),
+    image: formData.get('image'),
+    date: formData.get('date'),
+    description: formData.get('description'),
+  };
+
+  let url = 'http://localhost:8080/events';
+
+  if (request.method === 'PATCH') {
+    url += `/${params.id}`;
+  }
+
+  const res = await fetch(url, {
+    method: request.method,
+    body: JSON.stringify(eventData),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (res.status === 422) {
+    return res;
+  }
+
+  if (!res.ok) {
+    throw new Response(JSON.stringify({ message: 'Could not save event.', }), { status: 500, });
+  }
+
+  return redirect('/events');
+}

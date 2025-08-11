@@ -6,8 +6,9 @@ import HomePage from './pages/HomePage';
 import EventsRoot from './pages/EventsRoot';
 import EventsPage, { loader as eventsLoader } from './pages/EventsPage';
 import EventDetailsPage, { loader as eventDetailLoader, action as deleteEventAction, } from './pages/EventDetailsPage';
-import NewEventPage, { action as newEventAction } from './pages/NewEventPage';
+import NewEventPage from './pages/NewEventPage';
 import EditEventPage from './pages/EditEventPage';
+import { action as saveEventAction } from './components/EventForm';
 
 const router = createBrowserRouter([
   {
@@ -27,10 +28,10 @@ const router = createBrowserRouter([
             loader: eventDetailLoader,
             children: [
               { index: true, element: <EventDetailsPage />, action: deleteEventAction, },
-              { path: 'edit', element: <EditEventPage />, },
+              { path: 'edit', element: <EditEventPage />, action: saveEventAction, },
             ],
           },
-          { path: 'new', element: <NewEventPage />, action: newEventAction },
+          { path: 'new', element: <NewEventPage />, action: saveEventAction, },
         ]
       }
     ],
