@@ -12,7 +12,7 @@ export default function MainHeader() {
       <MainHeaderBackground />
       <header className={classes.header}>
 
-        <Link className={classes.logo} href="/26-next-js/main-project/public">
+        <Link className={classes.logo} href="/">
           <Image
             src={logo}
             alt="A plate with food on it"
