@@ -25,10 +25,21 @@ export default function HomePage({ meetups}) {
   );
 }
 
-export function getStaticProps() {
+// better for constantly updated data -- runs on every request
+// export async function getServerSideProps({ req, res}) {
+//   return {
+//     props: {
+//       meetups: DUMMY_MEETUPS,
+//     },
+//   };
+// }
+
+// better for infrequently or predictably updated data -- runs on a schedule
+export async function getStaticProps() {
   return {
     props: {
       meetups: DUMMY_MEETUPS,
     },
+    revalidate: 5,
   };
 }
