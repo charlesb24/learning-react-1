@@ -1,5 +1,5 @@
 import { useContext, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useAnimate, stagger } from 'framer-motion';
 
 import { ChallengesContext } from '../store/challenges-context.jsx';
 import Modal from './Modal.jsx';
@@ -9,6 +9,8 @@ export default function NewChallenge({ onDone }) {
   const title = useRef();
   const description = useRef();
   const deadline = useRef();
+
+  const [ scope, animate ] = useAnimate();
 
   const [selectedImage, setSelectedImage] = useState(null);
   const { addChallenge } = useContext(ChallengesContext);
@@ -32,6 +34,13 @@ export default function NewChallenge({ onDone }) {
       !challenge.deadline.trim() ||
       !challenge.image
     ) {
+      animate('input, textarea', {
+        x: [-10, 0, 10, 0],
+      }, {
+        type: 'keyframes',
+        duration: 0.4,
+        delay: stagger(0.1),
+      });
       return;
     }
 
@@ -41,7 +50,7 @@ export default function NewChallenge({ onDone }) {
 
   return (
     <Modal title="New Challenge" onClose={onDone}>
-      <form id="new-challenge" onSubmit={handleSubmit}>
+      <form id="new-challenge" onSubmit={handleSubmit} ref={scope}>
         <p>
           <label htmlFor="title">Title</label>
           <input ref={title} type="text" name="title" id="title" />
@@ -61,14 +70,14 @@ export default function NewChallenge({ onDone }) {
           id="new-challenge-images"
           variants={{
             hidden: { transition: {} },
-            shown: { transition: { staggerChildren: 0.15 } },
+            shown: { transition: { staggerChildren: 0.05 } },
           }}
         >
           {images.map((image) => (
             <motion.li
               variants={{
                 hidden: { opacity: 0, scale: 0.5 },
-                shown: { opacity: 1, scale: 1 },
+                shown: { opacity: 1, scale: [0.8, 1.3, 1] },
               }}
               exit={{ opacity: 1, scale: 1 }}
               key={image.alt}
