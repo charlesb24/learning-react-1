@@ -1,12 +1,12 @@
-import { useContext, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import {useContext, useState} from 'react';
+import {AnimatePresence, motion} from 'framer-motion';
 
-import { ChallengesContext } from '../store/challenges-context.jsx';
+import {ChallengesContext} from '../store/challenges-context.jsx';
 import ChallengeItem from './ChallengeItem.jsx';
 import ChallengeTabs from './ChallengeTabs.jsx';
 
 export default function Challenges() {
-  const { challenges } = useContext(ChallengesContext);
+  const {challenges} = useContext(ChallengesContext);
   const [selectedType, setSelectedType] = useState('active');
   const [expanded, setExpanded] = useState(null);
 
@@ -43,7 +43,8 @@ export default function Challenges() {
       >
         <AnimatePresence mode="wait">
           {displayedChallenges.length > 0 && (
-            <motion.ol key="list" exit={{y: -30, opacity: 0}} className="challenge-items">
+            <motion.ol key="list" initial={{opacity: 0, y: -30}} animate={{opacity: 1, y: 0}}
+                       exit={{y: -30, opacity: 0}} className="challenge-items">
               <AnimatePresence>
                 {displayedChallenges.map((challenge) => (
                   <ChallengeItem
