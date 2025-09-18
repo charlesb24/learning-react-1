@@ -1,22 +1,23 @@
-import { useAccordionContext } from './Accordion.jsx';
+import { createContext, useContext } from 'react';
 
-export default function AccordionItem({ id, title, className, children }) {
-  const { activeItemId, openItem, closeItem } = useAccordionContext();
+const AccordionItemContext = createContext();
 
-  const isOpen = activeItemId === id;
+export function useAccordionItemContext() {
+  const context = useContext(AccordionItemContext);
 
-  function handleClick() {
-    if (isOpen) {
-      closeItem();
-    } else {
-      openItem(id);
-    }
+  if (!context) {
+    throw new Error('useAccordionItemContext must be used within an AccordionItemContext Provider')
   }
 
+  return context;
+}
+
+export default function AccordionItem({ id, className, children }) {
   return (
-    <li className={className}>
-      <h3 className="accordion-item-title" onClick={handleClick}>{ title }</h3>
-      <div className={`accordion-item-content ${isOpen ? 'open' : ''}`}>{ children }</div>
-    </li>
+    <AccordionItemContext.Provider value={id}>
+      <li className={className}>
+        { children }
+      </li>
+    </AccordionItemContext.Provider>
   );
 }
